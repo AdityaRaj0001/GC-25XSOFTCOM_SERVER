@@ -59,4 +59,9 @@ export class UsersController {
             );
         }
     }
+
+    @Get('get-all-coordinators')
+    async getAllCoordinators() {
+        return await this.usersService.getCoordinators();
+    }
 }

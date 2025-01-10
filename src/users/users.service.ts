@@ -124,4 +124,17 @@ export class UsersService {
             );
         }
     }
+
+    async getCoordinators(): Promise<any> {
+        try {
+            return await this.prisma.user.findMany({
+                where: { isCoordinator: true }
+            });
+        } catch (error) {
+            throw new HttpException(
+                error.message || 'ERROR_FETCHING_COORDINATORS',
+                HttpStatus.BAD_REQUEST,
+            );
+        }
+    }
 }
