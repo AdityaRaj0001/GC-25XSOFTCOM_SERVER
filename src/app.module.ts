@@ -10,6 +10,8 @@ import { UsersModule } from './users/users.module';
 import { AdminService } from './admin/admin.service';
 import { AdminController } from './admin/admin.controller';
 import { AdminModule } from './admin/admin.module';
+import { CoordinatorModule } from './coordinator/coordinator.module';
+import { HallRepModule } from './hall-rep/hall-rep.module';
 
 @Module({
   imports: [
@@ -17,7 +19,9 @@ import { AdminModule } from './admin/admin.module';
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     UsersModule,
-    AdminModule
+    AdminModule,
+    CoordinatorModule,
+    HallRepModule,
   ],
   controllers: [AppController, AdminController],
   providers: [AppService, AuthService, UsersService, AdminService],
