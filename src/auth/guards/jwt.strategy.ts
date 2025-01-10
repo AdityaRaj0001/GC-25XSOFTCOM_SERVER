@@ -6,9 +6,9 @@
 
   export interface JwtPayload {
     id: string;
-    role?: string;
-    email?: string;
-    subscriptionId?: string;
+    isAdmin: boolean;
+    isCoordinator: boolean;
+    isHallRep: boolean;
   }
 
   @Injectable()

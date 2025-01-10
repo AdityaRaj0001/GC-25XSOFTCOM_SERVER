@@ -70,7 +70,7 @@ export class AuthService {
             if (!res) {
                 throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
             }
-            const token = await this._createToken(res.id);
+            const token = await this._createToken(res.id, res.isAdmin, res.isCoordinator, res.isHallRep);
             
             return { success: true, message: 'USER_REGISTERED', data: {res, token} };
         } catch (error) {
@@ -110,7 +110,7 @@ export class AuthService {
                     data: null,
                 };
             }
-            const token = await this._createToken(user.id);
+            const token = await this._createToken(user.id, res.isAdmin, res.isCoordinator, res.isHallRep);
             return {
                 success: true,
                 message: 'LOGIN_SUCCESS',
@@ -127,8 +127,8 @@ export class AuthService {
         }
     }
 
-    private async _createToken(id: string): Promise<Token> {
-        const user: JwtPayload = { id };
+    private async _createToken(id: string, isAdmin: boolean, isCoordinator: boolean, isHallRep: boolean): Promise<Token> {
+        const user: JwtPayload = { id, isAdmin, isCoordinator, isHallRep };
         const jwt_token = this.jwtService.sign(user);
         const expiresAt = addMinutes(new Date(), parseInt(process.env.EXPIRESIN));
 
