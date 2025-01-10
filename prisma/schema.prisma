@@ -26,10 +26,11 @@ model User {
   isAdmin       Boolean  @default(false)
   isCoordinator Boolean  @default(false)
   isHallRep     Boolean  @default(false)
-  hall          Hall?    @relation("HallRepresentative")
+  hall          Hall?    @relation("HallRepresentative") // which hall's Rep is this user
   teamMembers   Team[]   @relation("TeamMembers")
   coordinating  Event[]  @relation("EventCoordinator")
-
+  hallId        String?
+  userHall      Hall?    @relation(fields: [hallId], references: [id]) // which hall does this user belong to
   @@map("users")
 }
 
@@ -38,7 +39,7 @@ model Hall {
   hallName  String   @unique
   hallRep   User     @relation("HallRepresentative", fields: [hallRepId], references: [id])
   hallRepId String   @unique
-  teams     Team[]
+  users     User[]
 
   @@map("halls")
 }
@@ -67,8 +68,8 @@ model Team {
   event     Event    @relation(fields: [eventId], references: [id])
   eventId   String
   approved  Boolean  @default(false)
-  hall      Hall     @relation(fields: [hallId], references: [id])
-  hallId    String
+  // hall      Hall     @relation(fields: [hallId], references: [id])
+  // hallId    String
   scores    Leaderboard[] @relation("TeamScores")
 
   @@map("teams")
