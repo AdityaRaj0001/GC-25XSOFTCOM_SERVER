@@ -6,7 +6,6 @@
 
 // schema.prisma
 
-
 // This is your Prisma schema file for Event Management System
 
 generator client {
@@ -19,33 +18,34 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(cuid())
+  id            String  @id @default(cuid())
   name          String
-  email         String   @unique
+  email         String  @unique
   password      String
-  isAdmin       Boolean  @default(false)
-  isCoordinator Boolean  @default(false)
-  isHallRep     Boolean  @default(false)
-  hall          Hall?    @relation("HallRepresentative") // which hall's Rep is this user
-  teamMembers   Team[]   @relation("TeamMembers")
-  coordinating  Event[]  @relation("EventCoordinator")
+  isAdmin       Boolean @default(false)
+  isCoordinator Boolean @default(false)
+  isHallRep     Boolean @default(false)
+  hall          Hall?   @relation("HallRepresentative") // which hall's Rep is this user
+  teamMembers   Team[]  @relation("TeamMembers")
+  coordinating  Event[] @relation("EventCoordinator")
   hallId        String?
-  userHall      Hall?    @relation(fields: [hallId], references: [id]) // which hall does this user belong to
+  userHall      Hall?   @relation(fields: [hallId], references: [id]) // which hall does this user belong to
+
   @@map("users")
 }
 
 model Hall {
-  id        String   @id @default(cuid())
-  hallName  String   @unique
-  hallRep   User     @relation("HallRepresentative", fields: [hallRepId], references: [id])
-  hallRepId String   @unique
+  id        String @id @default(cuid())
+  hallName  String @unique
+  hallRep   User   @relation("HallRepresentative", fields: [hallRepId], references: [id])
+  hallRepId String @unique
   users     User[]
 
   @@map("halls")
 }
 
 model Event {
-  id              String      @id @default(cuid())
+  id              String       @id @default(cuid())
   title           String
   description     String
   rulebooks       String
@@ -54,7 +54,7 @@ model Event {
   venues          String
   prizes          String
   maxLimit        Int
-  coordinator     User        @relation("EventCoordinator", fields: [coordinatorId], references: [id])
+  coordinator     User         @relation("EventCoordinator", fields: [coordinatorId], references: [id])
   coordinatorId   String
   registeredTeams Team[]
   leaderboard     Leaderboard?
@@ -63,24 +63,24 @@ model Event {
 }
 
 model Team {
-  id        String   @id @default(cuid())
-  members   User[]   @relation("TeamMembers")
-  event     Event    @relation(fields: [eventId], references: [id])
-  eventId   String
-  approved  Boolean  @default(false)
-  // hall      Hall     @relation(fields: [hallId], references: [id])
-  // hallId    String
-  scores    Leaderboard[] @relation("TeamScores")
+  id            String       @id @default(cuid())
+  members       User[]       @relation("TeamMembers")
+  event         Event        @relation(fields: [eventId], references: [id])
+  eventId       String
+  approved      Boolean      @default(false)
+  score         Int
+  leaderBoard   Leaderboard? @relation("TeamScores", fields: [leaderBoardId], references: [id])
+  leaderBoardId String
 
   @@map("teams")
 }
 
 model Leaderboard {
-  id       String   @id @default(cuid())
-  event    Event    @relation(fields: [eventId], references: [id])
-  eventId  String   @unique
-  teams    Team[]   @relation("TeamScores")
-  scores   Int[]
+  id      String @id @default(cuid())
+  event   Event  @relation(fields: [eventId], references: [id])
+  eventId String @unique
+  teams   Team[] @relation("TeamScores")
+  scores  Int[]
 
   @@map("leaderboards")
 }
