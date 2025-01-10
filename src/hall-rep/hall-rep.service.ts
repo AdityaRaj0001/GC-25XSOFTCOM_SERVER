@@ -3,7 +3,7 @@ import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
 export class HallRepService {
-  constructor(private readonly prisma: DatabaseService) {}
+  constructor(private prisma: DatabaseService) {}
 
   getHallRep(): string {
     return 'This is the HallRepService';

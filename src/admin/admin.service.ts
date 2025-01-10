@@ -127,14 +127,4 @@ export class AdminService {
         }
     }
 
-    async getEvents(): Promise<any> {
-        try {
-            return await this.prisma.event.findMany();
-        } catch (error) {
-            throw new HttpException(
-                error.message || 'ERROR_FETCHING_EVENTS',
-                HttpStatus.BAD_REQUEST,
-            );
-        }
-    }
 }

@@ -1,5 +1,5 @@
-import { Body, Controller, Get, UseGuards, HttpException, HttpStatus, Param, Post, Query, Req } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { Body, Controller, Get, UseGuards, HttpException, HttpStatus, Param, Post, Request, Query, Req } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { AdminService } from './admin.service';
 import { CreateEvent } from './admin.dto';
@@ -29,10 +29,5 @@ export class AdminController {
     @Post('create-hall')
     async createHall(@Body() data: any) {
         return await this.adminService.createHall(data);
-    }
-
-    @Get('get-all-events')
-    async getAllEvents() {
-        return await this.adminService.getEvents();
     }
 }
