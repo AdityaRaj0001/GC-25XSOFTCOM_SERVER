@@ -3,8 +3,14 @@ import { DatabaseService } from 'src/database/database.service';
 import { CreateTeamDto } from './create-team.dto';
 
 @Injectable()
-export class UserService {
+export class UsersService {
   constructor(private prisma: DatabaseService) {}
+
+  async findByPayload({ id }: any): Promise<any> {
+    return await this.prisma.user.findFirst({
+        where: { id:id },
+    });
+  }
 
   async registerTeam(createTeamDto: CreateTeamDto) {
     const { eventId, leaderId, members } = createTeamDto;

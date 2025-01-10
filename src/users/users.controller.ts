@@ -1,7 +1,7 @@
 import { Body, Controller, Get, UseGuards, HttpException, HttpStatus, Request, Param, Post, Query, Req } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { UserService } from './users.service';
+import { UsersService } from './users.service';
 import { CreateTeamDto } from './create-team.dto';
 
 @ApiTags('users')
@@ -9,7 +9,7 @@ import { CreateTeamDto } from './create-team.dto';
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('JWT-auth')
 export class UsersController {
-    constructor(private readonly usersService: UserService) { }
+    constructor(private readonly usersService: UsersService) { }
 
 
     @Post('/register_team')
