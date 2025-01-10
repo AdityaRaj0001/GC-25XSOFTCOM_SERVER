@@ -7,7 +7,7 @@ export class UsersService {
 
     async findByPayload({ id }: any): Promise<any> {
         return await this.prisma.user.findFirst({
-            where: { userId:id },
+            where: { id:id },
         });
     }
 }

@@ -32,14 +32,6 @@ export class RegisterUserDto {
     @IsNotEmpty()
     @IsString()
     password: string;
-
-    @ApiProperty({
-        description: "Hall id of the person",
-        example: "H1"
-    })
-    @IsNotEmpty()
-    @IsString()
-    hall: string;
 }
 
 export class LoginUserDto {
@@ -51,6 +43,7 @@ export class LoginUserDto {
     @IsEmail()
     email: string;
 
+    @ApiProperty()
     @IsNotEmpty()
     @IsString()
     password: string;

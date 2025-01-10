@@ -43,7 +43,7 @@ export class AuthService {
     }> {
         try {
             const {
-                name, email, password, hall
+                name, email, password
             } = userDto;
             if (!this.validateEmail(email)) {
                 return { success: false, message: 'INVALID_EMAIL', data: null };
@@ -58,16 +58,18 @@ export class AuthService {
             const res = await this.prisma.user.upsert({
                 where: { email },
                 update: {
-                    email, name, password, hall
+                    email, name, password
                 },
                 create: {
-                    email, name, password, hall
+                    email, name, password
                 }
             })
             if (!res) {
                 throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
             }
-            return { success: true, message: 'USER_REGISTERED', data: res };
+            const token = await this._createToken(res.id);
+            
+            return { success: true, message: 'USER_REGISTERED', data: {res, token} };
         } catch (error) {
             console.log("error");
             throw new HttpException(
@@ -83,10 +85,10 @@ export class AuthService {
         data: any;
     }> {
         try {
-            // const user = await this.prisma.user.findFirst({
-            //     where: { email }
-            // })
-            const user = null;
+            const { email, password } = userDto;
+            const user = await this.prisma.user.findFirst({
+                where: { email }
+            })
             if (!user) {
                 return {
                     success: false,
@@ -94,6 +96,22 @@ export class AuthService {
                     data: null,
                 };
             }
+            if (password != user.password) {
+                return {
+                    success: false,
+                    message: 'INVALID_PASSWORD',
+                    data: null,
+                };
+            }
+            const token = await this._createToken(user.id);
+            return {
+                success: true,
+                message: 'LOGIN_SUCCESS',
+                data: {
+                    user,
+                    token,
+                },
+            };
         } catch (error) {
             throw new HttpException(
                 error.message || 'USER NOT FOUND',
@@ -102,8 +120,8 @@ export class AuthService {
         }
     }
 
-    private async _createToken(id: string, role: string): Promise<Token> {
-        const user: JwtPayload = { id, role };
+    private async _createToken(id: string): Promise<Token> {
+        const user: JwtPayload = { id };
         const jwt_token = this.jwtService.sign(user);
         const expiresAt = addMinutes(new Date(), parseInt(process.env.EXPIRESIN));
 
