@@ -30,6 +30,7 @@ model User {
   coordinating  Event[] @relation("EventCoordinator")
   hallId        String?
   userHall      Hall?   @relation(fields: [hallId], references: [id]) // which hall does this user belong to
+  teamLeader    Team[]  @relation("TeamLeader")
 
   @@map("users")
 }
@@ -71,6 +72,8 @@ model Team {
   score         Int
   leaderBoard   Leaderboard? @relation("TeamScores", fields: [leaderBoardId], references: [id])
   leaderBoardId String
+  teamLeader    User         @relation("TeamLeader", fields: [teamLeaderId], references: [id])
+  teamLeaderId  String
 
   @@map("teams")
 }
