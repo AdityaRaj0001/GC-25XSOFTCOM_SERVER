@@ -71,7 +71,7 @@ model Team {
   approved      Boolean      @default(false)
   score         Int
   leaderBoard   Leaderboard? @relation("TeamScores", fields: [leaderBoardId], references: [id])
-  leaderBoardId String
+  leaderBoardId String?
   teamLeader    User         @relation("TeamLeader", fields: [teamLeaderId], references: [id])
   teamLeaderId  String
 
