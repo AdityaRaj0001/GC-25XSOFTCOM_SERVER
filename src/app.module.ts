@@ -10,6 +10,7 @@ import { UsersModule } from './users/users.module';
 import { AdminService } from './admin/admin.service';
 import { AdminController } from './admin/admin.controller';
 import { AdminModule } from './admin/admin.module';
+import { CoordinatorModule } from './coordinator/coordinator.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { AdminModule } from './admin/admin.module';
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     UsersModule,
-    AdminModule
+    AdminModule,
+    CoordinatorModule
   ],
   controllers: [AppController, AdminController],
   providers: [AppService, AuthService, UsersService, AdminService],
