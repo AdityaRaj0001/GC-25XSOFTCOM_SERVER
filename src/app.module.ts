@@ -22,7 +22,7 @@ import { LeaderboardModule } from './leaderboard/leaderboard.module';
     UsersModule,
     AdminModule,
     CoordinatorModule,
-    HallRepModule,,
+    HallRepModule,
     LeaderboardModule
   ],
   controllers: [AppController, AdminController],
