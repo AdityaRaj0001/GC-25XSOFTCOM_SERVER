@@ -30,42 +30,4 @@ export class AdminController {
     async createHall(@Body() data: any) {
         return await this.adminService.createHall(data);
     }
-
-    @Get('get-all-events')
-    async getAllEvents() {
-        return await this.adminService.getEvents();
-    }
-
-    @Get('search-events')
-    @ApiQuery({
-        name: 's',
-        required: true,
-        type: String,
-        description: 'Search query',
-    })
-    @ApiQuery({
-        name: 'page',
-        required: false,
-        type: Number,
-        description: 'Page number',
-    })
-    @ApiQuery({
-        name: 'resultPerPage',
-        required: false,
-        type: Number,
-        default: 10,
-        description: 'Page number',
-    })
-    async searchEvents(@Request() req) {
-        try {
-            const page : number = req.query.page ? parseInt(req.query.page, 10) : 1;
-            const resultPerPage = req.query.resultPerPage ? parseInt(req.query.resultPerPage, 10) : 10;
-            return await this.adminService.searchEvents(req.query.s, page, resultPerPage);
-        } catch (error) {
-            throw new HttpException(
-                error.message || 'Error searching products',
-                HttpStatus.INTERNAL_SERVER_ERROR,
-            );
-        }
-    }
 }
