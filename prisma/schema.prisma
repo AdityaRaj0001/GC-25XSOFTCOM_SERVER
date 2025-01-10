@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["tracing"]
 }
 
 datasource db {
@@ -15,7 +14,39 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
+  userId    String     @id @default(cuid())
   email String  @unique
-  name  String?
+  name  String
+  password String
+  hall String
+  teams   Team_User[]
+  isAdmin Boolean  @default(false)
+  isRep   Boolean  @default(false)
+  eventsCreated Event[]
+}
+
+model Event {
+  eventId   String    @id @default(cuid())
+  eventName String
+  rulebook  String
+  creatorId String
+  createdBy User    @relation(fields: [creatorId], references: [userId])
+  teams     Team[]
+}
+
+model Team_User {
+  teamId  String
+  team    Team      @relation(fields: [teamId], references: [teamId])
+  userId  String
+  user    User      @relation(fields: [userId], references: [userId])
+
+  @@id([teamId, userId])
+}
+
+model Team {
+  teamId   String      @id @default(cuid())
+  members   Team_User[]
+  eventId   String
+  event     Event      @relation(fields: [eventId], references: [eventId])
+  approved  Boolean  @default(false)
 }
