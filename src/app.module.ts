@@ -12,6 +12,7 @@ import { AdminController } from './admin/admin.controller';
 import { AdminModule } from './admin/admin.module';
 import { CoordinatorModule } from './coordinator/coordinator.module';
 import { HallRepModule } from './hall-rep/hall-rep.module';
+import { LeaderboardModule } from './leaderboard/leaderboard.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { HallRepModule } from './hall-rep/hall-rep.module';
     UsersModule,
     AdminModule,
     CoordinatorModule,
-    HallRepModule,
+    HallRepModule,,
+    LeaderboardModule
   ],
   controllers: [AppController, AdminController],
   providers: [AppService, AuthService, UsersService, AdminService],
