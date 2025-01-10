@@ -137,4 +137,44 @@ export class AdminService {
             );
         }
     }
+
+    async searchEvents(query: string, page: number, resultPerPage: number): Promise<any> {
+        try {
+            const eventCount = await this.prisma.event.count({
+                where: {
+                    OR: [
+                        {title : {contains: query}},
+                        {description : {contains: query}},
+                        {prizes : {contains: query}},
+                        {venues : {contains: query}},
+                    ]
+                }
+            })
+            const events = await this.prisma.event.findMany({
+                where: {
+                    OR: [
+                        {title : {contains: query}},
+                        {description : {contains: query}},
+                        {prizes : {contains: query}},
+                        {venues : {contains: query}},
+                    ]
+                },
+                skip: (page - 1) * resultPerPage,
+                take: resultPerPage
+            });
+            return {
+                success: true,
+                message: 'Products retrieved successfully',
+                data: events,
+                page: page,
+                total: events.length,
+                lastPage: Math.ceil(eventCount / resultPerPage)
+            }
+        } catch (error) {
+            throw new HttpException(
+                error.message || 'ERROR_SEARCHING_EVENTS',
+                HttpStatus.BAD_REQUEST,
+            );
+        }
+    }
 }
