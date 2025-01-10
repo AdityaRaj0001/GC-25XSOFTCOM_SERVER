@@ -4,6 +4,11 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    origin: '*', // Allow all origins
+    methods: '*', // Allow all HTTP methods
+    allowedHeaders: '*', // Allow all headers
+  });
   const config = new DocumentBuilder()
     .setTitle("GC'25XSOFTCOM API")
     .setDescription('This is the description of the API')
