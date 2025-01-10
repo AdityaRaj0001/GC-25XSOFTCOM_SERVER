@@ -10,4 +10,8 @@ export class UsersService {
             where: { id:id },
         });
     }
+
+    async getAllUsers(): Promise<any> {
+        return await this.prisma.user.findMany();
+    }
 }

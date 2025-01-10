@@ -54,14 +54,17 @@ export class AuthService {
             if (user) {
                 return { success: false, message: 'USER_ALREADY_EXISTS', data: user };
             }
-
+            const hashedPassword = await bcrypt.hash(
+                password,
+                Number(process.env.PASSWORD_HASH),
+              );
             const res = await this.prisma.user.upsert({
                 where: { email },
                 update: {
-                    email, name, password
+                    email, name, password:hashedPassword
                 },
                 create: {
-                    email, name, password
+                    email, name, password:hashedPassword
                 }
             })
             if (!res) {
@@ -96,7 +99,11 @@ export class AuthService {
                     data: null,
                 };
             }
-            if (password != user.password) {
+            const isPasswordValid = await bcrypt.compare(
+                password,
+                user.password,
+              );
+            if (!isPasswordValid) {
                 return {
                     success: false,
                     message: 'INVALID_PASSWORD',
