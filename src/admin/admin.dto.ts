@@ -84,6 +84,14 @@ export class CreateEvent {
     @IsNotEmpty()
     @IsString()
     coordinatorId: string;
+
+    @ApiProperty({
+        description: "Coordinator of the event",
+        example: "[cuid]"
+    })
+    @IsNotEmpty()
+    @IsString()
+    clubName: string;
 }
 
 export class CreateHall {

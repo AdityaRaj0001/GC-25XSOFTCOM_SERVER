@@ -110,7 +110,7 @@ export class AuthService {
                     data: null,
                 };
             }
-            const token = await this._createToken(user.id, res.isAdmin, res.isCoordinator, res.isHallRep);
+            const token = await this._createToken(user.id, user.isAdmin, user.isCoordinator, user.isHallRep);
             return {
                 success: true,
                 message: 'LOGIN_SUCCESS',

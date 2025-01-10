@@ -50,6 +50,7 @@ model Event {
   title           String
   description     String
   rulebooks       String
+  clubName        String
   eventStart      DateTime
   duration        Float
   venues          String

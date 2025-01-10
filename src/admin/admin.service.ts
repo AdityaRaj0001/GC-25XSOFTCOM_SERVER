@@ -8,7 +8,7 @@ export class AdminService {
 
     async createEvent(data: CreateEvent): Promise<any> {
         try {
-            const { title, description, rulebooks, eventStart, duration, venues, prizes, maxLimit, coordinatorId} = data;
+            const { title, description, rulebooks, eventStart, duration, venues, prizes, maxLimit, coordinatorId, clubName} = data;
             const validCoordinator = await this.prisma.user.findFirst({
                 where: { id: coordinatorId }
             });
@@ -28,7 +28,8 @@ export class AdminService {
                     venues,
                     prizes,
                     maxLimit:Number(maxLimit),
-                    coordinatorId
+                    coordinatorId,
+                    clubName
                 }
             });
         } catch (error) {

@@ -94,6 +94,7 @@ export class UsersService {
                         {description : {contains: query}},
                         {prizes : {contains: query}},
                         {venues : {contains: query}},
+                        {clubName: {contains: query}}
                     ]
                 }
             })
@@ -104,6 +105,7 @@ export class UsersService {
                         {description : {contains: query}},
                         {prizes : {contains: query}},
                         {venues : {contains: query}},
+                        {clubName: {contains: query}}
                     ]
                 },
                 skip: (page - 1) * resultPerPage,
