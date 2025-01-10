@@ -20,4 +20,19 @@ export class AdminController {
     async makeCoordinator(@Param('id') id: string) {
         return await this.adminService.makeCoordinator(id);
     }
+
+    @Post('make-hall-rep/:id')
+    async makeHallRep(@Param('id') id: string) {
+        return await this.adminService.makeHallRepresentative(id);
+    }
+
+    @Post('create-hall')
+    async createHall(@Body() data: any) {
+        return await this.adminService.createHall(data);
+    }
+
+    @Get('get-all-events')
+    async getAllEvents() {
+        return await this.adminService.getEvents();
+    }
 }

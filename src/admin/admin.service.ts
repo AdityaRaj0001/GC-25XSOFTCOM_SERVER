@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
-import { CreateEvent } from './admin.dto';
+import { CreateEvent, CreateHall } from './admin.dto';
 
 @Injectable()
 export class AdminService {
@@ -50,6 +50,12 @@ export class AdminService {
                     HttpStatus.BAD_REQUEST,
                 );
             }
+            if(user.isHallRep) {
+                throw new HttpException(
+                    'USER_ALREADY_HALL_REPRESENTATIVE',
+                    HttpStatus.BAD_REQUEST,
+                );
+            }
             await this.prisma.user.update({
                 where: { id: userId },
                 data: { isCoordinator: true }
@@ -57,6 +63,76 @@ export class AdminService {
         } catch (error) {
             throw new HttpException(
                 error.message || 'ERROR_MAKING_COORDINATOR',
+                HttpStatus.BAD_REQUEST,
+            );
+        }
+    }
+
+    async makeHallRepresentative(userId: string): Promise<any> {
+        try {
+            const user = await this.prisma.user.findFirst({
+                where: { id: userId }
+            });
+            if(user.isHallRep) {
+                throw new HttpException(
+                    'USER_ALREADY_HALL_REPRESENTATIVE',
+                    HttpStatus.BAD_REQUEST,
+                );
+            }
+            if(user.isCoordinator) {
+                throw new HttpException(
+                    'USER_ALREADY_COORDINATOR',
+                    HttpStatus.BAD_REQUEST,
+                );
+            }
+            await this.prisma.user.update({
+                where: { id: userId },
+                data: { isHallRep: true }
+            });
+        } catch (error) {
+            throw new HttpException(
+                error.message || 'ERROR_MAKING_HALL_REPRESENTATIVE',
+                HttpStatus.BAD_REQUEST,
+            );
+        }
+    }
+
+    async createHall(data: CreateHall): Promise<any> {
+        try {
+            const { hallName, hallRepId } = data;
+            const validHallRep = await this.prisma.user.findFirst({
+                where: { id: hallRepId }
+            });
+            if(!validHallRep.isHallRep) {
+                throw new HttpException(
+                    'INVALID_HALL_REPRESENTATIVE',
+                    HttpStatus.BAD_REQUEST,
+                );
+            }
+            const hall = await this.prisma.hall.upsert({
+                where: { hallName },
+                update: {
+                    hallRepId
+                },
+                create: {
+                    hallName,
+                    hallRepId
+                }
+            });
+        } catch (error) {
+            throw new HttpException(
+                error.message || 'ERROR_CREATING_HALL',
+                HttpStatus.BAD_REQUEST,
+            );
+        }
+    }
+
+    async getEvents(): Promise<any> {
+        try {
+            return await this.prisma.event.findMany();
+        } catch (error) {
+            throw new HttpException(
+                error.message || 'ERROR_FETCHING_EVENTS',
                 HttpStatus.BAD_REQUEST,
             );
         }

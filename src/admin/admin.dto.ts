@@ -85,3 +85,21 @@ export class CreateEvent {
     @IsString()
     coordinatorId: string;
 }
+
+export class CreateHall {
+    @ApiProperty({
+        description: "HallName",
+        example: "H1/Beas"
+    })
+    @IsNotEmpty()
+    @IsString()
+    hallName: string;
+
+    @ApiProperty({
+        description: "HallRep Id",
+        example: "[cuid]"
+    })
+    @IsNotEmpty()
+    @IsString()
+    hallRepId: string;
+}
