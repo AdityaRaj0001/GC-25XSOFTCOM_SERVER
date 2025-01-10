@@ -4,49 +4,82 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+// schema.prisma
+
+
+// This is your Prisma schema file for Event Management System
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  userId    String     @id @default(cuid())
-  email String  @unique
-  name  String
-  password String
-  hall String
-  teams   Team_User[]
-  isAdmin Boolean  @default(false)
-  isRep   Boolean  @default(false)
-  eventsCreated Event[]
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  password      String
+  isAdmin       Boolean  @default(false)
+  isCoordinator Boolean  @default(false)
+  isHallRep     Boolean  @default(false)
+  hall          Hall?    @relation("HallRepresentative")
+  teamMembers   Team[]   @relation("TeamMembers")
+  coordinating  Event[]  @relation("EventCoordinator")
+
+  @@map("users")
+}
+
+model Hall {
+  id        String   @id @default(cuid())
+  hallName  String   @unique
+  hallRep   User     @relation("HallRepresentative", fields: [hallRepId], references: [id])
+  hallRepId String   @unique
+  teams     Team[]
+
+  @@map("halls")
 }
 
 model Event {
-  eventId   String    @id @default(cuid())
-  eventName String
-  rulebook  String
-  creatorId String
-  createdBy User    @relation(fields: [creatorId], references: [userId])
-  teams     Team[]
-}
+  id              String      @id @default(cuid())
+  title           String
+  description     String
+  rulebooks       String
+  eventStart      DateTime
+  duration        Float
+  venues          String
+  prizes          String
+  maxLimit        Int
+  coordinator     User        @relation("EventCoordinator", fields: [coordinatorId], references: [id])
+  coordinatorId   String
+  registeredTeams Team[]
+  leaderboard     Leaderboard?
 
-model Team_User {
-  teamId  String
-  team    Team      @relation(fields: [teamId], references: [teamId])
-  userId  String
-  user    User      @relation(fields: [userId], references: [userId])
-
-  @@id([teamId, userId])
+  @@map("events")
 }
 
 model Team {
-  teamId   String      @id @default(cuid())
-  members   Team_User[]
+  id        String   @id @default(cuid())
+  members   User[]   @relation("TeamMembers")
+  event     Event    @relation(fields: [eventId], references: [id])
   eventId   String
-  event     Event      @relation(fields: [eventId], references: [eventId])
   approved  Boolean  @default(false)
+  hall      Hall     @relation(fields: [hallId], references: [id])
+  hallId    String
+  scores    Leaderboard[] @relation("TeamScores")
+
+  @@map("teams")
+}
+
+model Leaderboard {
+  id       String   @id @default(cuid())
+  event    Event    @relation(fields: [eventId], references: [id])
+  eventId  String   @unique
+  teams    Team[]   @relation("TeamScores")
+  scores   Int[]
+
+  @@map("leaderboards")
 }
