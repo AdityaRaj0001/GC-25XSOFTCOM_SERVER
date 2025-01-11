@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// schema.prisma
+
+// This is your Prisma schema file for Event Management System
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String  @id @default(cuid())
+  name          String
+  email         String  @unique
+  password      String
+  isAdmin       Boolean @default(false)
+  isCoordinator Boolean @default(false)
+  isHallRep     Boolean @default(false)
+  hall          Hall?   @relation("HallRepresentative") // which hall's Rep is this user
+  teamMembers   Team[]  @relation("TeamMembers")
+  coordinating  Event[] @relation("EventCoordinator")
+  hallId        String?
+  userHall      Hall?   @relation(fields: [hallId], references: [id]) // which hall does this user belong to
+  teamLeader    Team[]  @relation("TeamLeader")
+
+  @@map("users")
+}
+
+model Hall {
+  id        String @id @default(cuid())
+  hallName  String @unique
+  hallRep   User   @relation("HallRepresentative", fields: [hallRepId], references: [id])
+  hallRepId String @unique
+  users     User[]
+
+  @@map("halls")
+}
+
+model Event {
+  id              String       @id @default(cuid())
+  title           String
+  description     String
+  rulebooks       String
+  clubName        String
+  eventStart      DateTime
+  duration        Float
+  venues          String
+  prizes          String
+  maxLimit        Int
+  coordinator     User         @relation("EventCoordinator", fields: [coordinatorId], references: [id])
+  coordinatorId   String
+  registeredTeams Team[]
+  leaderboard     Leaderboard?
+
+  @@map("events")
+}
+
+model Team {
+  id            String       @id @default(cuid())
+  members       User[]       @relation("TeamMembers")
+  event         Event        @relation(fields: [eventId], references: [id])
+  eventId       String
+  approved      Boolean      @default(false)
+  score         Int
+  leaderBoard   Leaderboard? @relation("TeamScores", fields: [leaderBoardId], references: [id])
+  leaderBoardId String?
+  teamLeader    User         @relation("TeamLeader", fields: [teamLeaderId], references: [id])
+  teamLeaderId  String
+
+  @@map("teams")
+}
+
+model Leaderboard {
+  id      String @id @default(cuid())
+  event   Event  @relation(fields: [eventId], references: [id])
+  eventId String @unique
+  teams   Team[] @relation("TeamScores")
+  scores  Int[]
+
+  @@map("leaderboards")
+}
