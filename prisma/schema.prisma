@@ -50,7 +50,7 @@ model Event {
   title           String
   description     String
   rulebooks       String
-  clubName        String
+  clubName        String?      @default("SoftCom")
   eventStart      DateTime
   duration        Float
   venues          String

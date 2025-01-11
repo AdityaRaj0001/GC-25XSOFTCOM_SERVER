@@ -6,8 +6,8 @@ import { CreateEvent } from './admin.dto';
 
 @ApiTags('admin')
 @Controller('admin')
-@UseGuards(JwtAuthGuard)
-@ApiBearerAuth('JWT-auth')
+// @UseGuards(JwtAuthGuard)
+// @ApiBearerAuth('JWT-auth')
 export class AdminController {
     constructor(private readonly adminService: AdminService) { }
 

@@ -6,8 +6,8 @@ import { CreateTeamDto } from './create-team.dto';
 
 @ApiTags('users')
 @Controller('users')
-@UseGuards(JwtAuthGuard)
-@ApiBearerAuth('JWT-auth')
+// @UseGuards(JwtAuthGuard)
+// @ApiBearerAuth('JWT-auth')
 export class UsersController {
     constructor(private readonly usersService: UsersService) { }
 
