@@ -1,3 +1,16 @@
+# GC Management Portal
+
+## Hall 
+Beas
+
+## Team
+- Kartik Tiwari (Team Leader)
+- Yashasav Prajapati
+- Aditya Raj
+- Arpit Verma
+- Nikhil Rastogi
+
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
